@@ -28,3 +28,35 @@ X_train, X_test, y_train, y_test = train_test_split(anomaly_data_X, anomaly_data
 # NOTE: Anomaly detection needs to be robust to new data. 
 # The train_test_split data has outliers present and as a result would need trained with labels a.k.a. y_values
 # In unspervised methods, the unlabeled X_data will suffice for training.
+
+# plot to visualize data
+plt.scatter(X_data[:, 0], X_data[:, 1], c='blue')
+plt.scatter(X_outliers[:, 0], X_outliers[:, 1], c='red')
+plt.xlabel("x0")
+plt.ylabel("x1")
+plt.legend(['Benign Data', 'Outliers'], loc='upper right')
+plt.title("Anomaly Dataset")
+plt.savefig("output/anomaly_dataset.png")
+
+#----------------------------------------
+#             Tim's Thing
+#----------------------------------------
+
+# Explanation of method
+
+
+#----------------------------------------
+#       Local Outlier Technique
+#----------------------------------------
+
+
+
+#----------------------------------------
+#    Double Median Absolute Distance
+#----------------------------------------
+
+
+
+#----------------------------------------
+#           Isolation Forest
+#----------------------------------------
