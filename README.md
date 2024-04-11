@@ -7,4 +7,4 @@ ECE 1155 Information Security end of term paper studying anomaly detection.
 | Tim Horrell | [Tim](https://github.com/tdhorrell) | Supervised Learning |
 | John Darnall | [John]() | - |
 | Alex Smith | [Alex]() | - |
-| Ryan Recker | [Ryan]() | - |
+| Ryan Recker | [Ryan](https://github.com/rrecker01) | Local Outlier Factor |
