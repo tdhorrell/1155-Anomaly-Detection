@@ -5,9 +5,12 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 from matplotlib.colors import ListedColormap
+from matplotlib.legend_handler import HandlerPathCollection
 from sklearn.inspection import DecisionBoundaryDisplay
 from sklearn.model_selection import train_test_split
 from sklearn.neural_network import MLPClassifier
+from sklearn.neighbors import LocalOutlierFactor
+
 
 # generate random 2d data using numpy
 np.random.seed(7)
@@ -69,7 +72,29 @@ plt.savefig('output/MLP_test_decision_boundary.png')
 #----------------------------------------
 #       Local Outlier Technique
 #----------------------------------------
+X = np.r_[X_test]
+clf = LocalOutlierFactor(n_neighbors=5, contamination=0.1)
+y_pred = clf.fit_predict(X)
+X_scores = clf.negative_outlier_factor_
+plt.scatter(X[:, 0], X[:, 1], color="k", s=3.0, label="Data points")
 
+# plot circles with radius proportional to the outlier scores
+radius = (X_scores.max() - X_scores) / (X_scores.max() - X_scores.min())
+scatter = plt.scatter(
+    X[:, 0],
+    X[:, 1],
+    s=1000 * radius,
+    edgecolors="r",
+    facecolors="none",
+    label="Outlier scores",
+)
+plt.axis("auto")
+
+plt.legend(
+    handler_map={scatter: HandlerPathCollection(update_func=update_legend_marker_size)}
+)
+plt.title("Local Outlier Factor (LOF)")
+plt.savefig('output/LOF.png')
 
 
 #----------------------------------------
