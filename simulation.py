@@ -99,15 +99,26 @@ plt.savefig('output/LOF.png')
 
 
 #----------------------------------------
-#    Double Median Absolute Distance - John Darnall
+#    Double Median Absolute Deviation - John Darnall
 #----------------------------------------
 
-#calculating double median absolute distance
+#calculating double median absolute deviation bounds
+k = 3 #default standard check
 median = np.median(X_test)
-abs_diff = np.abs(X_test - median)
-double_MAD = 2 * median_abs_deviation(X_test)
 
-anomalies_indices = np.where(np.abs(X_test - median) > double_MAD)[0]
+lX_test = X_test[X_test <= median]
+uX_test = X_test[X_test > median]
+
+lMAD = median_abs_deviation(lX_test)
+uMAD = median_abs_deviation(uX_test)
+
+lower = median - k*lMAD
+upper = median + k*uMAD
+
+#comparing each point to upper and lower bounds to check for anomalies
+low_anomalies_indices = np.where(X_test < lower)[0]
+high_anomalies_indices = np.where(X_test >= upper)[0]
+anomalies_indices = np.concatenate((low_anomalies_indices, high_anomalies_indices))
 anomalies = X_test[anomalies_indices]
 
 print("Dataset: ", X_test)
@@ -119,9 +130,32 @@ plt.scatter(X_test[:,0], X_test[:,1], color = 'blue', label = 'Benign Data')
 plt.scatter(anomalies[:,0], anomalies[:,1], color = 'red', label = 'Anomalies')
 plt.xlabel('Data Point Index')
 plt.ylabel('Value')
-plt.title('Anomaly Detection Using Double Median Absolute Distance')
+plt.title('Anomaly Detection Using Double Median Absolute Deviation')
 plt.legend()
 plt.savefig('output/DoubleMAD.png')
+
+#standard MAD comparison
+MAD = median_abs_deviation(X_test)
+tlower = median - k*MAD
+tupper = median + k*MAD
+
+tlow_anomalies_indices = np.where(X_test < tlower)[0]
+thigh_anomalies_indices = np.where(X_test >= tupper)[0]
+tanomalies_indices = np.concatenate((tlow_anomalies_indices, thigh_anomalies_indices))
+tanomalies = X_test[tanomalies_indices]
+
+print("Dataset: ", X_test)
+print("Anomalies: ", tanomalies)
+
+#plotting data points
+plt.figure()
+plt.scatter(X_test[:,0], X_test[:,1], color = 'blue', label = 'Benign Data')
+plt.scatter(tanomalies[:,0], tanomalies[:,1], color = 'red', label = 'Anomalies')
+plt.xlabel('Data Point Index')
+plt.ylabel('Value')
+plt.title('Anomaly Detection Using Standard Median Absolute Deviation')
+plt.legend()
+plt.savefig('output/StandardMAD.png')
 
 
 #----------------------------------------
