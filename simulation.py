@@ -10,6 +10,7 @@ from sklearn.inspection import DecisionBoundaryDisplay
 from sklearn.model_selection import train_test_split
 from sklearn.neural_network import MLPClassifier
 from sklearn.neighbors import LocalOutlierFactor
+from scipy.stats import median_abs_deviation
 
 
 # generate random 2d data using numpy
@@ -90,17 +91,37 @@ scatter = plt.scatter(
 )
 plt.axis("auto")
 
-plt.legend(
-    handler_map={scatter: HandlerPathCollection(update_func=update_legend_marker_size)}
-)
+#plt.legend(
+ #   handler_map={scatter: HandlerPathCollection(update_func=update_legend_marker_size)}
+#)
 plt.title("Local Outlier Factor (LOF)")
 plt.savefig('output/LOF.png')
 
 
 #----------------------------------------
-#    Double Median Absolute Distance
+#    Double Median Absolute Distance - John Darnall
 #----------------------------------------
 
+#calculating double median absolute distance
+median = np.median(X_test)
+abs_diff = np.abs(X_test - median)
+double_MAD = 2 * median_abs_deviation(X_test)
+
+anomalies_indices = np.where(np.abs(X_test - median) > double_MAD)[0]
+anomalies = X_test[anomalies_indices]
+
+print("Dataset: ", X_test)
+print("Anomalies: ", anomalies)
+
+#plotting data points
+plt.figure()
+plt.scatter(X_test[:,0], X_test[:,1], color = 'blue', label = 'Benign Data')
+plt.scatter(anomalies[:,0], anomalies[:,1], color = 'red', label = 'Anomalies')
+plt.xlabel('Data Point Index')
+plt.ylabel('Value')
+plt.title('Anomaly Detection Using Double Median Absolute Distance')
+plt.legend()
+plt.savefig('output/DoubleMAD.png')
 
 
 #----------------------------------------
